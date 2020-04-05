@@ -1,6 +1,7 @@
 import React from "react";
 import VoteTitle from "./VoteTitle";
 import Question from "./Question";
+import CandidatesGrid from "./CandidatesGrid";
 
 function VoteDapp() {
 
@@ -8,6 +9,7 @@ function VoteDapp() {
         <div>
             <VoteTitle/>
             <Question/>
+            <CandidatesGrid/>
         </div>
     );
 }
