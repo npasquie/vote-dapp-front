@@ -7,7 +7,8 @@ function CandidatePicture() {
     return(
         <div className={classname}>
             <img
-                //when implementing back, images will need to be converted to string, put in json, then sent to mongodb
+                /* when implementing back, images will need to be converted to
+                string, put in json, then sent to mongodb */
                 src={`data:image/jpeg;base64,${data}`}
                 alt="unchained"/>
         </div>

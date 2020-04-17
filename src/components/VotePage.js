@@ -9,7 +9,7 @@ function VotePage() {
 
     return(
         <div className={classname}>
-            <VoteTitle/>
+            <VoteTitle text={"Élection du BDE ISEP mandat 2020-2021"}/>
             <Question/>
             <CandidatesGrid/>
             <SubmitVote/>

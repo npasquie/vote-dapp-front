@@ -1,11 +1,11 @@
 import React from "react";
 
-function VoteTitle() {
+function VoteTitle(props) {
     let classname = "vote-title";
 
     return(
         <div className={classname}>
-            Élection du BDE ISEP mandat 2020-2021
+            {props.text}
         </div>
     );
 }

@@ -2,7 +2,7 @@ body
     font: 14px "Century Gothic", Futura, sans-serif
     margin: 20px
 
-.vote-page
+%center-children-column
     display: flex
     flex-direction: column
     align-items: center
@@ -14,6 +14,12 @@ body
     left: 0
     right: 0
     margin: auto
+
+.vote-page
+    @extend %center-children-column
+
+.ballot-create-page
+    @extend %center-children-column
 
 .vote-title
     color: #bcbdd0
