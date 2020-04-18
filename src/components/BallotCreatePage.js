@@ -2,15 +2,20 @@ import React, {useState} from "react";
 import VoteTitle from "./VoteTitle";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import CandidateInputList from "./CandidateInputList";
 
 function BallotCreatePage() {
     let classname = "ballot-create-page";
     const [name, setName] = useState("");
     const [question, setQuestion] = useState("");
     const [endDate, setEndDate] = useState(new Date());
+    const [mails, setMails] = useState("");
+    const [extEnabled, setExtEnabled] = useState(false);
 
     let nameId = "name";
     let questionId = "question";
+    let mailsId = "mails";
+    let extEnabledId = "extEnab";
 
     return(
         <div className={classname}>
@@ -33,6 +38,20 @@ function BallotCreatePage() {
                         timeIntervals={15}
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"/>
+            <label htmlFor={mailsId}>
+                Adresses e-mail des votants ATTENTION :
+                n'entrez qu'une adresse par votant
+            </label>
+            <input id={mailsId}
+                   type={"textarea"}
+                   value={mails}
+                   placeholder={"copiez-collez ici"}
+                   onChange={e => setMails(e.target.value)}/>
+            <label htmlFor={extEnabledId}>Activer les pénalités/bonus</label>
+            <input type={"checkbox"} id={extEnabledId}
+                   checked={extEnabled}
+                   onChange={() => setExtEnabled(!extEnabled)}/>
+            <CandidateInputList/>
         </div>
     );
 }
