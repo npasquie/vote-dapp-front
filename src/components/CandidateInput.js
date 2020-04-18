@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import bytesInfo from "../utils/utils";
 
 function CandidateInput(props) {
     let classname = "candidate-input";
@@ -14,6 +15,8 @@ function CandidateInput(props) {
                    type={"text"}
                    value={name}
                    onChange={e => setName(e.target.value)}/>
+            {bytesInfo(name)}
+            <br/>
         </div>
     );
 }
