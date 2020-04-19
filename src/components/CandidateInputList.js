@@ -1,22 +1,26 @@
-import React, {useState} from "react";
+import React from "react";
 import CandidateInput from "./CandidateInput";
+import {addCandidate, removeCandidate} from "../redux/actions";
+import {useDispatch, useSelector} from 'react-redux'
 
 function CandidateInputList() {
     let classname = "candidate-input-list";
-    const [inpList, setInpList] = useState(
-        [<CandidateInput num={1} key={1}/>,
-         <CandidateInput num={2} key={2}/>]);
+    const nameListLength = useSelector(state =>
+        state.candidates.candidateNames.length);
+    const dispatch = useDispatch();
+    let inpList = [];
+    for (let i = 0; i < nameListLength; i++){
+        inpList = inpList.concat(<CandidateInput num={i+1} key={i+1}/>);
+    }
 
     return(
         <div className={classname}>
             {inpList}
-            <button onClick={() => {
-                let num = inpList.length + 1;
-                setInpList(inpList.concat(
-                <CandidateInput num={num} key={num}/>
-            ))}}>+</button>
-            {inpList.length > 2 ? <button onClick={() => {
-                setInpList(inpList.slice(0,inpList.length - 1))}}>-</button> :
+            <button onClick={() =>
+                dispatch(addCandidate())
+            }>+</button>
+            {nameListLength > 2 ? <button onClick={() =>
+                dispatch(removeCandidate())}>-</button> :
             ""}
         </div>
     );
