@@ -1,15 +1,20 @@
-import React, {useState} from "react";
+import React from "react";
 import CandidatePicture from "./CandidatePicture";
+import {useDispatch, useSelector} from "react-redux";
+import {chooseCandidate} from "../redux/actions";
 
-function Candidate() {
-    let classname = "candidate";
-    const [clicked, setClicked] = useState(false);
+function Candidate(props) {
+    const classname = "candidate";
+    const name = props.name;
+    const selected =
+        useSelector(state => state.vote.candidateNameSelected) === name;
+    const dispatch = useDispatch();
 
     return(
-        <div className={classname + (clicked ? " clicked" : "")}>
-            <button onClick={()=>setClicked(!clicked)}>
+        <div className={classname + (selected ? " clicked" : "")}>
+            <button onClick={()=>dispatch(chooseCandidate(name))}>
                 <CandidatePicture/>
-                <h3>Unchained</h3>
+                <h3>{name}</h3>
             </button>
         </div>
     );

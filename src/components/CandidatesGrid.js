@@ -6,8 +6,9 @@ function CandidatesGrid() {
 
     return(
         <div className={classname}>
-            <Candidate/>
-            <Candidate/>
+            <Candidate name={"unchained"}/>
+            <Candidate name={"cosmoz"}/>
+            <Candidate name={"Jean-François Copé"}/>
         </div>
     );
 }

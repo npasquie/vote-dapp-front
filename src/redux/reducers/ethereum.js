@@ -1,4 +1,4 @@
-import {CHANGE_WEB3_CONNEXION_STATUS, SET_ERROR, SET_WEB3_INSTANCE}
+import {CHANGE_WEB3_CONNEXION_STATUS, SET_ACCOUNTS, SET_ERROR, SET_WEB3_INSTANCE}
     from "../actionTypes";
 
 const initialState = {
@@ -26,10 +26,17 @@ export default function(state = initialState, action) {
             }
         }
         case SET_ERROR: {
-            const {error} = action.error;
+            const {error} = action.payload;
             return {
                 ...state,
                 error: error
+            }
+        }
+        case SET_ACCOUNTS: {
+            const {accounts} = action.payload;
+            return {
+                ...state,
+                accounts: accounts
             }
         }
         default:

@@ -10,6 +10,15 @@ import TopBar from "./TopBar";
 import {useSelector} from "react-redux";
 import {WEB3_CONNEXION_STATUS} from "../redux/constants";
 
+function handleError(error) {
+    console.log(error);
+    return(
+        <>
+            Erreur. Ouvrez la console pour voir le rapport d'erreur.
+        </>
+    );
+}
+
 function VoteDapp() {
 
     const web3Status = useSelector(state => state.ethereum.web3ConnexionStatus);
@@ -42,7 +51,7 @@ function VoteDapp() {
             return (
                 <>
                     <TopBar/>
-                    {error.message}
+                    {handleError(error)}
                 </>
             );
         }

@@ -1,6 +1,7 @@
 import {
     ADD_CANDIDATE, REMOVE_CANDIDATE, CHANGE_CANDIDATE_NAME,
-    CHANGE_BALLOT_ARG, CHANGE_WEB3_CONNEXION_STATUS, SET_WEB3_INSTANCE, SET_ERROR
+    CHANGE_BALLOT_ARG, CHANGE_WEB3_CONNEXION_STATUS, SET_WEB3_INSTANCE,
+    SET_ERROR, SET_ACCOUNTS, CHOOSE_CANDIDATE
 }
     from "./actionTypes";
 
@@ -44,10 +45,24 @@ const setWeb3Instance = (instance) => ({
    }
 });
 
+const setAccounts = (accounts) => ({
+   type: SET_ACCOUNTS,
+    payload: {
+       accounts: accounts
+    }
+});
+
 const setError = (error) => ({
     type: SET_ERROR,
     payload: {
         error: error
+    }
+});
+
+const chooseCandidate = (candidateName) => ({
+    type: CHOOSE_CANDIDATE,
+    payload: {
+        candidateName: candidateName
     }
 });
 
@@ -58,5 +73,7 @@ export {
     changeBallotArg,
     changeWeb3ConnexionStatus,
     setWeb3Instance,
-    setError
+    setError,
+    setAccounts,
+    chooseCandidate
 }
