@@ -1,9 +1,17 @@
-import {changeWeb3ConnexionStatus,
-        setAccounts,
-        setError,
-        setWeb3Instance} from "./actions";
+import {
+    addLog,
+    changeDeploymentStatus,
+    changeWeb3ConnexionStatus,
+    setAccounts,
+    setError,
+    setWeb3Instance
+} from "./actions";
 import getWeb3 from "../web3/getWeb3";
-import {WEB3_CONNEXION_STATUS} from "./constants";
+import {BALLOT_DEPLOYMENT_STATUS, WEB3_CONNEXION_STATUS} from "./constants";
+import {getBallotCreationArgs} from "./selectors";
+import store from "./store";
+
+const getState = store.getState; // this is a func
 
 const getWeb3Action = () => {
     return dispatch => {
@@ -31,10 +39,39 @@ const getWeb3Accounts = (web3) => {
     };
 };
 
+const createBallot = () => {
+    return dispatch => {
+        dispatch(changeDeploymentStatus(BALLOT_DEPLOYMENT_STATUS.STARTED));
+        log("deployment start",dispatch);
+        const args = getBallotCreationArgs(getState());
+        let dataToSend = {
+          name: args.name,
+          mails: args.mails,
+          images: null
+        };
+        let jsonToSend = JSON.stringify(dataToSend);
+        let req = new XMLHttpRequest();
+        req.open("POST","/api/new-ballot",true);
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        req.onload = () => {
+            console.log(req.status,dispatch);
+        };
+        req.send(jsonToSend);
+        dispatch(changeDeploymentStatus(
+            BALLOT_DEPLOYMENT_STATUS.STEP_1_SENT_TO_BACK));
+        log("sent name and mails of the ballot",dispatch);
+    }
+};
+
+function log(log,dispatch) {
+    console.log(log);
+    dispatch(addLog(log));
+}
+
 function handleError(error,dispatch) {
     dispatch(changeWeb3ConnexionStatus(
         WEB3_CONNEXION_STATUS.FAILED));
     dispatch(setError(error));
 }
 
-export {getWeb3Action};
+export {getWeb3Action,createBallot};

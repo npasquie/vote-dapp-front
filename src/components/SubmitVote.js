@@ -9,7 +9,7 @@ function SubmitVote() {
             <button>
                 <img src={voteIcon} alt={"vote"}/>
                 <br/>
-                vote !
+                voter !
             </button>
         </div>
     );

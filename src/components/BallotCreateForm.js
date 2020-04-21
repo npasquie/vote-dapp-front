@@ -7,18 +7,20 @@ import bytesInfo from "../utils/utils";
 import addrs from "email-addresses";
 import {useSelector,useDispatch} from "react-redux";
 import {changeBallotArg} from "../redux/actions";
+import {createBallot} from "../redux/asyncActions";
+import store from "../redux/store";
 
 function BallotCreateForm() {
-    let classname = "ballot-create-form";
+    const classname = "ballot-create-form";
     const {name,question,endDate,mails,extEnabled}
         = useSelector(state =>
         state.ballotCreate);
     const dispatch = useDispatch();
 
-    let nameId = "name";
-    let questionId = "question";
-    let mailsId = "mails";
-    let extEnabledId = "extEnab";
+    const nameId = "name";
+    const questionId = "question";
+    const mailsId = "mails";
+    const extEnabledId = "extEnab";
 
     return(
         <div className={classname}>
@@ -86,7 +88,8 @@ function BallotCreateForm() {
             <CandidateInputList/>
             <br/>
 
-            <button>Publier !</button>
+            <button onClick={() => store.dispatch(createBallot())}>
+                Publier !</button>
         </div>
     );
 }
