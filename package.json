@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "email-addresses": "^3.1.0",
+    "http-proxy-middleware": "^1.0.3",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-datepicker": "^2.14.1",
@@ -19,7 +20,7 @@
     "web3": "^1.2.6"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -27,7 +28,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:3000",
   "browserslist": {
     "production": [
       ">0.2%",

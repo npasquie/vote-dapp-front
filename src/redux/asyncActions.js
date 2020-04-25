@@ -21,7 +21,7 @@ const getWeb3Action = () => {
             dispatch(getWeb3Accounts(response));
         })
         .catch(error => {
-            handleError(error,dispatch);
+            handleWeb3Error(error,dispatch);
         })
     };
 };
@@ -34,7 +34,7 @@ const getWeb3Accounts = (web3) => {
             dispatch(changeWeb3ConnexionStatus(
                 WEB3_CONNEXION_STATUS.CONNECTED));
         }).catch(error => {
-            handleError(error,dispatch);
+            handleWeb3Error(error,dispatch);
         })
     };
 };
@@ -45,16 +45,28 @@ const createBallot = () => {
         log("deployment start",dispatch);
         const args = getBallotCreationArgs(getState());
         let dataToSend = {
-          name: args.name,
-          mails: args.mails,
-          images: null
+            name: args.name,
+            mails: args.mails,
+            images: null
         };
         let jsonToSend = JSON.stringify(dataToSend);
         let req = new XMLHttpRequest();
+        let voterCodeHashes;
         req.open("POST","/api/new-ballot",true);
         req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         req.onload = () => {
-            console.log(req.status,dispatch);
+            if (req.status === 200){ // success
+                voterCodeHashes = req.response;
+                dispatch(changeDeploymentStatus(
+                    BALLOT_DEPLOYMENT_STATUS.STEP_2_CODE_HASHES_RECEIVED));
+                log("voter code's hashes received",dispatch);
+            }
+            else {
+                handleServerEror(req.response,dispatch);
+            }
+        };
+        req.onerror = () => {
+            handleServerEror()
         };
         req.send(jsonToSend);
         dispatch(changeDeploymentStatus(
@@ -68,7 +80,14 @@ function log(log,dispatch) {
     dispatch(addLog(log));
 }
 
-function handleError(error,dispatch) {
+function handleServerEror(msg,dispatch) {
+    dispatch(changeDeploymentStatus(
+        BALLOT_DEPLOYMENT_STATUS.FAILED));
+    dispatch(addLog("error, see console for details"));
+    console.log(msg);
+}
+
+function handleWeb3Error(error,dispatch) {
     dispatch(changeWeb3ConnexionStatus(
         WEB3_CONNEXION_STATUS.FAILED));
     dispatch(setError(error));
