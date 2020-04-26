@@ -15,17 +15,23 @@ function BallotCreatePage() {
         return(
             <BallotCreateForm/>
         );
-    else
+    else {
+        let mode = "";
+        if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.SUCCESS)
+            mode = "Cool";
+        else if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.FAILED)
+            mode = "NotCool";
         return (
             <>
                 <br/>
                 <VoteTitle text={"Déploiement du vote"}/>
-                <Question text={deploymentStatus}/>
+                <Question text={deploymentStatus} mode={mode}/>
                 <Question text={"Logs :"}/>
                 <br/>
                 {deploymentLogs}
             </>
         );
+    }
 }
 
 export default BallotCreatePage;

@@ -15,6 +15,11 @@ body
     right: 0
     margin: auto
 
+%question
+    margin: 10px
+    font-size: 18px
+    text-align: center
+
 .vote-page
     @extend %center-children-column
 
@@ -27,9 +32,15 @@ body
     text-align: center
 
 .question
-    margin: 10px
-    font-size: 18px
-    text-align: center
+    @extend %question
+
+.questionCool
+    @extend %question
+    color: green
+
+.questionNotCool
+    @extend %question
+    color: red
 
 .candidates-grid
     margin-left: auto

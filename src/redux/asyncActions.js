@@ -54,7 +54,7 @@ const createBallot = () => {
         let jsonToSend = JSON.stringify(dataToSend);
         let req = new XMLHttpRequest();
         let voterCodeHashes;
-        req.open("POST","/api/new-ballot",true);
+        req.open("POST","/api/new-ballot",true); // true is for async mode
         req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         req.onload = () => {
             if (req.status === 200){ // success
@@ -108,10 +108,42 @@ const deployBallotToTheBlockchain = (args,voterCodeHashes) => {
                 ));
                 log(`new ballot's contract instance has been created at
                 address ${newBallotAddress}`,dispatch);
+                dispatch(sendBallotAddressToBack(args.name,newBallotAddress));
         }).catch(error => {
             handleServerError(error,dispatch);
         });
-    }
+    };
+};
+
+// called 3rd
+const sendBallotAddressToBack = (name, address) => {
+    return dispatch => {
+        let dataToSend = {
+            name: name,
+            address: address
+        };
+        let jsonToSend = JSON.stringify(dataToSend);
+        let req = new XMLHttpRequest();
+        req.open("POST","/api/set-ballot-address",true);
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        req.onload = () => {
+            if (req.status === 200){ // success
+                dispatch(changeDeploymentStatus(
+                    BALLOT_DEPLOYMENT_STATUS.SUCCESS));
+                log("new ballot was successfully deployed, mails" +
+                    " are being send to voters",dispatch);
+            }
+            else // server error
+                handleServerError(req.response,dispatch);
+        };
+        req.onerror = () => { // communication error
+            handleServerError("server communication error",dispatch);
+        };
+        req.send(jsonToSend);
+        dispatch(changeDeploymentStatus(
+            BALLOT_DEPLOYMENT_STATUS.STEP_5_ADDRESS_SENT_TO_BACK));
+        log("sent name and mails of the ballot",dispatch);
+    };
 };
 
 function log(log,dispatch) {
