@@ -13,8 +13,7 @@ import store from "../redux/store";
 function BallotCreateForm() {
     const classname = "ballot-create-form";
     const {name,question,endDate,mails,extEnabled}
-        = useSelector(state =>
-        state.ballotCreate);
+        = useSelector(state => state.ballotCreate);
     const dispatch = useDispatch();
 
     const nameId = "name";

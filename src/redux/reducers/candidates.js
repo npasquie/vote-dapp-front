@@ -2,7 +2,7 @@ import {ADD_CANDIDATE,CHANGE_CANDIDATE_NAME,REMOVE_CANDIDATE}
 from "../actionTypes";
 
 const initialState = {
-    candidateNames : ["",""]
+    candidateNames : ["a","b"] // TODO : put back empty default values after tests
 };
 
 export default function(state = initialState, action) {

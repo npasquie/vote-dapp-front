@@ -10,9 +10,8 @@ import getWeb3 from "../web3/getWeb3";
 import {BALLOT_DEPLOYMENT_STATUS, WEB3_CONNEXION_STATUS} from "./constants";
 import {getBallotCreationArgs} from "./selectors";
 import store from "./store";
-import web3 from "web3";
-import ballotInterface from "../../vote-dapp-contract/build/Ballot";
-import {ballotArgsHandler} from "../../vote-dapp-contract/misc/ballot-utils";
+import ballotUtils from "ballot-utils";
+import ballotInterface from "Ballot";
 
 const getState = store.getState; // this is a func
 
@@ -59,7 +58,7 @@ const createBallot = () => {
         req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         req.onload = () => {
             if (req.status === 200){ // success
-                voterCodeHashes = req.response;
+                voterCodeHashes = JSON.parse(req.response);
                 dispatch(changeDeploymentStatus(
                     BALLOT_DEPLOYMENT_STATUS.STEP_2_CODE_HASHES_RECEIVED));
                 log("voter's code's hashes received",dispatch);
@@ -81,20 +80,20 @@ const createBallot = () => {
 // called 2nd
 const deployBallotToTheBlockchain = (args,voterCodeHashes) => {
     return dispatch => {
+        const web3 = (state => state.ethereum.web3Instance)(getState());
         let newBallot = new web3.eth.Contract(ballotInterface.abi);
         const account = (state => state.ethereum.accounts[0])(getState());
         let newBallotAddress;
         newBallot.deploy({
             data: ballotInterface.bytecode,
-            arguments: ballotArgsHandler(
+            arguments: ballotUtils.ballotArgsHandler(
                 args.name,
                 args.question,
                 args.endDate,
                 voterCodeHashes,
                 args.extEnabled,
                 null,
-                args.candidateNames
-            )
+                args.candidateNames)
         }).send({
             from: account
         },((error,transactionHash) => {
@@ -108,7 +107,7 @@ const deployBallotToTheBlockchain = (args,voterCodeHashes) => {
                     BALLOT_DEPLOYMENT_STATUS.STEP_4_TRANSACTION_PASSED
                 ));
                 log(`new ballot's contract instance has been created at
-                address ${newBallotAddress}`);
+                address ${newBallotAddress}`,dispatch);
         }).catch(error => {
             handleServerError(error,dispatch);
         });
