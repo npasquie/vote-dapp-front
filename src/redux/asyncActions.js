@@ -10,6 +10,9 @@ import getWeb3 from "../web3/getWeb3";
 import {BALLOT_DEPLOYMENT_STATUS, WEB3_CONNEXION_STATUS} from "./constants";
 import {getBallotCreationArgs} from "./selectors";
 import store from "./store";
+import web3 from "web3";
+import ballotInterface from "../../vote-dapp-contract/build/Ballot";
+import {ballotArgsHandler} from "../../vote-dapp-contract/misc/ballot-utils";
 
 const getState = store.getState; // this is a func
 
@@ -33,12 +36,12 @@ const getWeb3Accounts = (web3) => {
             dispatch(setAccounts(response));
             dispatch(changeWeb3ConnexionStatus(
                 WEB3_CONNEXION_STATUS.CONNECTED));
-        }).catch(error => {
-            handleWeb3Error(error,dispatch);
-        })
+        }) // no catch needed, is already in getWeb3Action
     };
 };
 
+// ballot deployment :
+// called 1st
 const createBallot = () => {
     return dispatch => {
         dispatch(changeDeploymentStatus(BALLOT_DEPLOYMENT_STATUS.STARTED));
@@ -59,14 +62,14 @@ const createBallot = () => {
                 voterCodeHashes = req.response;
                 dispatch(changeDeploymentStatus(
                     BALLOT_DEPLOYMENT_STATUS.STEP_2_CODE_HASHES_RECEIVED));
-                log("voter code's hashes received",dispatch);
+                log("voter's code's hashes received",dispatch);
+                dispatch(deployBallotToTheBlockchain(args,voterCodeHashes));
             }
-            else {
-                handleServerEror(req.response,dispatch);
-            }
+            else // server error
+                handleServerError(req.response,dispatch);
         };
         req.onerror = () => {
-            handleServerEror()
+            handleServerError("server communication error",dispatch);
         };
         req.send(jsonToSend);
         dispatch(changeDeploymentStatus(
@@ -75,12 +78,49 @@ const createBallot = () => {
     }
 };
 
+// called 2nd
+const deployBallotToTheBlockchain = (args,voterCodeHashes) => {
+    return dispatch => {
+        let newBallot = new web3.eth.Contract(ballotInterface.abi);
+        const account = (state => state.ethereum.accounts[0])(getState());
+        let newBallotAddress;
+        newBallot.deploy({
+            data: ballotInterface.bytecode,
+            arguments: ballotArgsHandler(
+                args.name,
+                args.question,
+                args.endDate,
+                voterCodeHashes,
+                args.extEnabled,
+                null,
+                args.candidateNames
+            )
+        }).send({
+            from: account
+        },((error,transactionHash) => {
+            dispatch(changeDeploymentStatus(
+                BALLOT_DEPLOYMENT_STATUS.STEP_3_TRANSACTION_SENT
+            ));
+            log(`transaction ${transactionHash} sent`,dispatch);
+        })).then(newBallotInstance => {
+                newBallotAddress = newBallotInstance.options.address;
+                dispatch(changeDeploymentStatus(
+                    BALLOT_DEPLOYMENT_STATUS.STEP_4_TRANSACTION_PASSED
+                ));
+                log(`new ballot's contract instance has been created at
+                address ${newBallotAddress}`);
+        }).catch(error => {
+            handleServerError(error,dispatch);
+        });
+    }
+};
+
 function log(log,dispatch) {
     console.log(log);
     dispatch(addLog(log));
 }
 
-function handleServerEror(msg,dispatch) {
+function handleServerError(msg,dispatch) {
     dispatch(changeDeploymentStatus(
         BALLOT_DEPLOYMENT_STATUS.FAILED));
     dispatch(addLog("error, see console for details"));
