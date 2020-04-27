@@ -3,7 +3,7 @@ import VoteTitle from "./VoteTitle";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CandidateInputList from "./CandidateInputList";
-import bytesInfo from "../utils/utils";
+import {bytesInfo} from "../utils/utils";
 import addrs from "email-addresses";
 import {useSelector,useDispatch} from "react-redux";
 import {changeBallotArg} from "../redux/actions";

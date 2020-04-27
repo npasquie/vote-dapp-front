@@ -3,7 +3,9 @@ import {
     changeDeploymentStatus,
     changeWeb3ConnexionStatus,
     setAccounts,
+    setContract,
     setError,
+    setVoteElem,
     setWeb3Instance
 } from "./actions";
 import getWeb3 from "../web3/getWeb3";
@@ -36,6 +38,27 @@ const getWeb3Accounts = (web3) => {
             dispatch(changeWeb3ConnexionStatus(
                 WEB3_CONNEXION_STATUS.CONNECTED));
         }) // no catch needed, is already in getWeb3Action
+    };
+};
+
+const fetchAddrAndSetContract = (name) => {
+    return dispatch => {
+        let req = new XMLHttpRequest();
+        req.open("GET",`/api/get-address/${name}`,true);
+        req.onload = () => {
+            if (req.status === 200) { // success
+                let address = req.response;
+                console.log(req.response);
+                let web3 = getState().ethereum.web3Instance;
+                let contract = new web3.eth.Contract(ballotInterface,address);
+                dispatch(setContract(contract));
+            } else
+                handleVoteError(req.response,dispatch);
+        };
+        req.onerror = () => {
+            handleVoteError("server communication error",dispatch);
+        };
+        req.send();
     };
 };
 
@@ -115,7 +138,7 @@ const deployBallotToTheBlockchain = (args,voterCodeHashes) => {
     };
 };
 
-// called 3rd
+// called 3rd and last
 const sendBallotAddressToBack = (name, address) => {
     return dispatch => {
         let dataToSend = {
@@ -164,4 +187,8 @@ function handleWeb3Error(error,dispatch) {
     dispatch(setError(error));
 }
 
-export {getWeb3Action,createBallot};
+function handleVoteError(error,dispatch) {
+    dispatch(setVoteElem("error",error));
+}
+
+export {getWeb3Action,createBallot,fetchAddrAndSetContract};

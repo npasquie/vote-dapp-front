@@ -1,5 +1,5 @@
 import React from "react";
-import bytesInfo from "../utils/utils";
+import {bytesInfo} from "../utils/utils";
 import {useSelector,useDispatch} from "react-redux";
 import {changeCandidateName} from "../redux/actions";
 

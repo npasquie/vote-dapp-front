@@ -1,10 +1,10 @@
-import {CHANGE_WEB3_CONNEXION_STATUS, SET_ACCOUNTS, SET_ERROR, SET_WEB3_INSTANCE}
+import {CHANGE_WEB3_CONNEXION_STATUS, SET_ACCOUNTS, SET_CONTRACT, SET_ERROR, SET_WEB3_INSTANCE}
     from "../actionTypes";
 
 const initialState = {
     web3Instance: null,
     web3ConnexionStatus: null,
-    error: null,
+    error: null, // used when getting web3 and the contract
     accounts: null,
     contract: null
 };
@@ -37,6 +37,13 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 accounts: accounts
+            }
+        }
+        case SET_CONTRACT: {
+            const{contract} = action.payload;
+            return {
+                ...state,
+                contract: contract
             }
         }
         default:

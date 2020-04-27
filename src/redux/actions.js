@@ -2,7 +2,7 @@ import {
     ADD_CANDIDATE, REMOVE_CANDIDATE, CHANGE_CANDIDATE_NAME,
     CHANGE_BALLOT_ARG, CHANGE_WEB3_CONNEXION_STATUS, SET_WEB3_INSTANCE,
     SET_ERROR, SET_ACCOUNTS, CHOOSE_CANDIDATE, CHANGE_DEPLOYMENT_STATUS,
-    ADD_LOG
+    ADD_LOG, SET_CONTRACT, SET_VOTE_ELEM
 }
     from "./actionTypes";
 
@@ -78,5 +78,20 @@ export const changeDeploymentStatus = (status) => ({
     type: CHANGE_DEPLOYMENT_STATUS,
     payload: {
         status: status
+    }
+});
+
+export const setVoteElem = (elem,data) => ({
+    type: SET_VOTE_ELEM,
+    payload: {
+        elem:elem,
+        data: data
+    }
+});
+
+export const setContract = (contract) => ({
+    type: SET_CONTRACT,
+    payload: {
+        contract: contract
     }
 });

@@ -22,4 +22,14 @@ function bytesInfo(str){
     );
 }
 
-export default bytesInfo;
+function handleError(error) {
+    console.log(error);
+    return(
+        <>
+            <br/>
+            Erreur. Ouvrez la console pour voir le rapport d'erreur.
+        </>
+    );
+}
+
+export {bytesInfo,handleError};
