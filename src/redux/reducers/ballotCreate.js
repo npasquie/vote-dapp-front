@@ -6,7 +6,7 @@ const initialState = { // TODO : put back empty default values after tests
     name : "test",
     question: "quoi",
     endDate: new Date("December 17, 2035 03:24:00"),
-    mails: "q@e.d",
+    mails: "mail@domain.com",
     extEnabled: true, // TODO : this one also
     deploymentStatus: BALLOT_DEPLOYMENT_STATUS.NOT_LAUNCHED,
     deploymentLogs: []

@@ -18,9 +18,9 @@ function BallotCreatePage() {
     else {
         let mode = "";
         if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.SUCCESS)
-            mode = "Cool";
+            mode = "cool";
         else if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.FAILED)
-            mode = "NotCool";
+            mode = "not-cool";
         return (
             <>
                 <br/>
