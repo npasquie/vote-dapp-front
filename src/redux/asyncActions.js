@@ -47,10 +47,10 @@ const fetchAddrAndSetContract = (name) => {
         req.open("GET",`/api/get-address/${name}`,true);
         req.onload = () => {
             if (req.status === 200) { // success
-                let address = req.response;
-                console.log(req.response);
+                let address = JSON.parse(req.response);
                 let web3 = getState().ethereum.web3Instance;
-                let contract = new web3.eth.Contract(ballotInterface,address);
+                let contract = new web3.eth.Contract(
+                    ballotInterface.abi,address);
                 dispatch(setContract(contract));
             } else
                 handleVoteError(req.response,dispatch);
@@ -59,6 +59,31 @@ const fetchAddrAndSetContract = (name) => {
             handleVoteError("server communication error",dispatch);
         };
         req.send();
+    };
+};
+
+const fetchContractData = () => {
+    return dispatch => {
+        let contract = getState().ethereum.contract;
+        let tempError = null;
+        let calls = [
+            {func: contract.methods.getQuestion(), elName: "question"},
+            {func: contract.methods.getName(), elName: "title"},
+            {func: contract.methods.getCandidateNames(),
+                elName: "candidateNames"},
+            {func: contract.methods.getEndTime(), elName: "endTime"}];
+        calls.forEach(callObj => {
+            if (!tempError){
+                callObj.func.call().then( result => {
+                    dispatch(setVoteElem(callObj.elName,result));
+                }).catch( error => {
+                    tempError = error;
+                });
+            } else {
+                dispatch(setVoteElem("error",tempError));
+                return null;
+            }
+        });
     };
 };
 
@@ -191,4 +216,4 @@ function handleVoteError(error,dispatch) {
     dispatch(setVoteElem("error",error));
 }
 
-export {getWeb3Action,createBallot,fetchAddrAndSetContract};
+export {getWeb3Action,createBallot,fetchAddrAndSetContract,fetchContractData};

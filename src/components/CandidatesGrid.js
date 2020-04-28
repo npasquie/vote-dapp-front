@@ -1,14 +1,17 @@
 import React from "react";
 import Candidate from "./Candidate";
 
-function CandidatesGrid() {
+function CandidatesGrid(props) {
     let classname = "candidates-grid";
+    const candidatesNames = props.candidates;
+    let candidates = [];
 
+    candidatesNames.forEach((name,i) => {
+       candidates.push(<Candidate name={name} key={i}/>);
+    });
     return(
         <div className={classname}>
-            <Candidate name={"unchained"}/>
-            <Candidate name={"cosmoz"}/>
-            <Candidate name={"les déchaînés"}/>
+            {candidates}
         </div>
     );
 }

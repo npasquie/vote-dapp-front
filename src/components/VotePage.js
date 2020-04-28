@@ -6,7 +6,7 @@ import SubmitVote from "./SubmitVote";
 import {useDispatch, useSelector} from "react-redux";
 import {handleError} from "../utils/utils";
 import {setVoteElem} from "../redux/actions";
-import {fetchAddrAndSetContract} from "../redux/asyncActions";
+import {fetchAddrAndSetContract, fetchContractData} from "../redux/asyncActions";
 
 /**
  * @return {null}
@@ -14,11 +14,14 @@ import {fetchAddrAndSetContract} from "../redux/asyncActions";
 function VotePage() {
     // hooks cannot be called conditionally (funcs "use<something>")
     const dispatch = useDispatch();
-    const error = useSelector(state => state.vote.error);
     const contract = useSelector(state => state.ethereum.contract);
+    const error = useSelector(state => state.vote.error);
     const code = useSelector(state => state.vote.code);
     const ballotName = useSelector(state => state.vote.ballotName);
     const candidateNames = useSelector(state => state.vote.candidateNames);
+    const title = useSelector(state => state.vote.title);
+    const endTime = useSelector(state => state.vote.endTime);
+    const question = useSelector(state => state.vote.question);
     const classname  = "vote-page";
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -44,13 +47,18 @@ function VotePage() {
         dispatch(fetchAddrAndSetContract(ballotName));
         return null;
     }
+    // http://localhost:3001/?name=test%20youpi%203&code=a
 
+    console.log(endTime);
+    if (!endTime || !title || !question || !candidateNames){
+        dispatch(fetchContractData());
+        return null;
+    }
     return (
         <div className={classname}>
-            <VoteTitle text={"Élection du BDE ISEP mandat 2020-2021"}/>
-            <Question text={"Quels bande de tocards va vous prendre de " +
-            "haut pendant un an ?"}/>
-            <CandidatesGrid/>
+            <VoteTitle text={title}/>
+            <Question text={question}/>
+            <CandidatesGrid candidates={candidateNames}/>
             <SubmitVote/>
         </div>
     );

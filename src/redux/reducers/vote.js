@@ -1,11 +1,13 @@
 import {CHOOSE_CANDIDATE, SET_VOTE_ELEM}
     from "../actionTypes";
+import utils from "ballot-utils";
 
 const initialState = {
     candidateNameSelected: null,
     ballotName: null,
     code: null,
     candidateNames: null,
+    endTime: null,
     title: null,
     question: null,
     error: null
@@ -45,13 +47,26 @@ export default function(state = initialState, action) {
                 case "title": {
                     return {
                         ...state,
-                        title: data
+                        title: utils.bytes32ToStr(data)
                     };
                 }
                 case "question": {
                     return {
                         ...state,
-                        question: data
+                        question: utils.bytes32ToStr(data)
+                    };
+                }
+                case "candidateNames": {
+                    return {
+                        ...state,
+                        candidateNames: utils.listBytes32ToListStr(data)
+                    };
+                }
+                case "endTime": {
+                    return {
+                        ...state,
+                        // unix epoch in milliseconds
+                        endTime: new Date(data * 1000)
                     };
                 }
                 default:
