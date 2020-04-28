@@ -41,6 +41,22 @@ const getWeb3Accounts = (web3) => {
     };
 };
 
+const sendVote = () => {
+    return dispatch => {
+        let {contract, accounts} = getState().ethereum;
+        let {candidateNameSelected, code} = getState().vote;
+
+        contract.methods.vote(
+            ballotUtils.strToBytes32(candidateNameSelected),
+                ballotUtils.strToBytes32(code))
+            .send({from: accounts[0]}).then(() => {
+
+        }).catch(error => {
+            handleVoteError(error,dispatch);
+        });
+    };
+};
+
 const fetchAddrAndSetContract = (name) => {
     return dispatch => {
         let req = new XMLHttpRequest();
@@ -216,4 +232,9 @@ function handleVoteError(error,dispatch) {
     dispatch(setVoteElem("error",error));
 }
 
-export {getWeb3Action,createBallot,fetchAddrAndSetContract,fetchContractData};
+export {
+    getWeb3Action,
+    createBallot,
+    fetchAddrAndSetContract,
+    fetchContractData,
+    sendVote};

@@ -22,11 +22,18 @@ function VotePage() {
     const title = useSelector(state => state.vote.title);
     const endTime = useSelector(state => state.vote.endTime);
     const question = useSelector(state => state.vote.question);
+    const voteHasBeenSent = useSelector(state => state.vote.voteHasBeenSent);
     const classname  = "vote-page";
     const urlParams = new URLSearchParams(window.location.search);
 
     if (error)
         return handleError(error); // stops the script here
+    if (voteHasBeenSent)
+        return (
+            <div className={classname}>
+                <Question text={"Votre vote est envoyé !"} mode={"cool"}/>
+            </div>
+        );
     if (!ballotName) {
         if (urlParams.get("name"))
             dispatch(setVoteElem("ballotName",urlParams.get("name")));
@@ -48,8 +55,6 @@ function VotePage() {
         return null;
     }
     // http://localhost:3001/?name=test%20youpi%203&code=a
-
-    console.log(endTime);
     if (!endTime || !title || !question || !candidateNames){
         dispatch(fetchContractData());
         return null;

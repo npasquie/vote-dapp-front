@@ -1,4 +1,4 @@
-import {CHOOSE_CANDIDATE, SET_VOTE_ELEM}
+import {CHOOSE_CANDIDATE, SET_VOTE_AS_REGISTERED, SET_VOTE_ELEM}
     from "../actionTypes";
 import utils from "ballot-utils";
 
@@ -10,7 +10,8 @@ const initialState = {
     endTime: null,
     title: null,
     question: null,
-    error: null
+    error: null,
+    voteHasBeenSent: false
     // contract is in ethereum reducer
 };
 
@@ -22,6 +23,12 @@ export default function(state = initialState, action) {
                 ...state,
                 candidateNameSelected: candidateName
             };
+        }
+        case SET_VOTE_AS_REGISTERED: {
+            return {
+                ...state,
+                voteHasBeenSent: true
+            }
         }
         case SET_VOTE_ELEM: {
             const {elem,data} = action.payload;

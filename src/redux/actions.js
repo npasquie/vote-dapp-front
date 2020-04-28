@@ -2,7 +2,7 @@ import {
     ADD_CANDIDATE, REMOVE_CANDIDATE, CHANGE_CANDIDATE_NAME,
     CHANGE_BALLOT_ARG, CHANGE_WEB3_CONNEXION_STATUS, SET_WEB3_INSTANCE,
     SET_ERROR, SET_ACCOUNTS, CHOOSE_CANDIDATE, CHANGE_DEPLOYMENT_STATUS,
-    ADD_LOG, SET_CONTRACT, SET_VOTE_ELEM
+    ADD_LOG, SET_CONTRACT, SET_VOTE_ELEM, SET_VOTE_AS_REGISTERED
 }
     from "./actionTypes";
 
@@ -94,4 +94,8 @@ export const setContract = (contract) => ({
     payload: {
         contract: contract
     }
+});
+
+export const setVoteAsRegistered = () => ({
+    type: SET_VOTE_AS_REGISTERED
 });

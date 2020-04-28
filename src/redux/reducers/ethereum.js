@@ -4,7 +4,7 @@ import {CHANGE_WEB3_CONNEXION_STATUS, SET_ACCOUNTS, SET_CONTRACT, SET_ERROR, SET
 const initialState = {
     web3Instance: null,
     web3ConnexionStatus: null,
-    error: null, // used when getting web3 and the contract
+    error: null,
     accounts: null,
     contract: null
 };

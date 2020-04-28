@@ -8,7 +8,6 @@ import addrs from "email-addresses";
 import {useSelector,useDispatch} from "react-redux";
 import {changeBallotArg} from "../redux/actions";
 import {createBallot} from "../redux/asyncActions";
-import store from "../redux/store";
 
 function BallotCreateForm() {
     const classname = "ballot-create-form";
@@ -87,7 +86,7 @@ function BallotCreateForm() {
             <CandidateInputList/>
             <br/>
 
-            <button onClick={() => store.dispatch(createBallot())}>
+            <button onClick={() => dispatch(createBallot())}>
                 Publier !</button>
         </div>
     );
