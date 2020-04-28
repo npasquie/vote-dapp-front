@@ -9,6 +9,9 @@ import {setVoteElem} from "../redux/actions";
 import {fetchAddrAndSetContract, fetchContractData} from "../redux/asyncActions";
 import {VOTE_STATUS} from "../redux/constants";
 
+// TODO : remove this
+import bu from "ballot-utils";
+
 /**
  * @return {null}
  */
@@ -66,6 +69,10 @@ function VotePage() {
         dispatch(fetchContractData());
         return null;
     }
+
+    // TODO : remove this
+    logResults(contract,candidateNames);
+
     return (
         <div className={classname}>
             <VoteTitle text={title}/>
@@ -74,6 +81,14 @@ function VotePage() {
             <SubmitVote/>
         </div>
     );
+}
+
+// TODO : remove this
+function logResults(contract,candidateNames) {
+    candidateNames.forEach(name => {
+       contract.methods.getCandidateScore(bu.strToBytes32(name)).call()
+           .then(res => {console.log(name + " : " + res)});
+    });
 }
 
 export default VotePage;

@@ -2,12 +2,12 @@ import {ADD_LOG, CHANGE_BALLOT_ARG, CHANGE_DEPLOYMENT_STATUS} from "../actionTyp
 import {BALLOT_DEPLOYMENT_STATUS} from "../constants";
 import React from "react";
 
-const initialState = { // TODO : put back empty default values after tests
-    name : "test",
-    question: "quoi",
-    endDate: new Date("December 17, 2035 03:24:00"),
-    mails: "mail@domain.com",
-    extEnabled: true, // TODO : this one also
+const initialState = {
+    name : null,
+    question: null,
+    endDate: null,
+    mails: null,
+    extEnabled: false,
     deploymentStatus: BALLOT_DEPLOYMENT_STATUS.NOT_LAUNCHED,
     deploymentLogs: []
 };
