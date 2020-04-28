@@ -64,7 +64,8 @@ const sendVote = () => {
 const fetchAddrAndSetContract = (name) => {
     return dispatch => {
         let req = new XMLHttpRequest();
-        req.open("GET",`/api/get-address/${name}`,true);
+        let nameURI = encodeURIComponent(name);
+        req.open("GET",`/api/get-address/${nameURI}`,true);
         req.onload = () => {
             if (req.status === 200) { // success
                 let address = JSON.parse(req.response);

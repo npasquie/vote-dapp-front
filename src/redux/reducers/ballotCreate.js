@@ -3,10 +3,10 @@ import {BALLOT_DEPLOYMENT_STATUS} from "../constants";
 import React from "react";
 
 const initialState = {
-    name : null,
-    question: null,
+    name : "",
+    question: "",
     endDate: null,
-    mails: null,
+    mails: "",
     extEnabled: false,
     deploymentStatus: BALLOT_DEPLOYMENT_STATUS.NOT_LAUNCHED,
     deploymentLogs: []

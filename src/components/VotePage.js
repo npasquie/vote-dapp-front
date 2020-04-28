@@ -42,7 +42,7 @@ function VotePage() {
     if (voteStatus === VOTE_STATUS.SUCCESS)
         return (
             <div className={classname}>
-                <Question text={"Votre vote est envoyé !"} mode={"cool"}/>
+                <Question text={"Votre vote est enregistré !"} mode={"cool"}/>
             </div>
         );
     if (!ballotName) {
@@ -71,7 +71,9 @@ function VotePage() {
     }
 
     // TODO : remove this
-    logResults(contract,candidateNames);
+    else {
+        logResults(contract, candidateNames);
+    }
 
     return (
         <div className={classname}>
