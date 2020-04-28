@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {handleError} from "../utils/utils";
 import {setVoteElem} from "../redux/actions";
 import {fetchAddrAndSetContract, fetchContractData} from "../redux/asyncActions";
+import {VOTE_STATUS} from "../redux/constants";
 
 /**
  * @return {null}
@@ -22,13 +23,20 @@ function VotePage() {
     const title = useSelector(state => state.vote.title);
     const endTime = useSelector(state => state.vote.endTime);
     const question = useSelector(state => state.vote.question);
-    const voteHasBeenSent = useSelector(state => state.vote.voteHasBeenSent);
+    const voteStatus = useSelector(state => state.vote.voteStatus);
     const classname  = "vote-page";
     const urlParams = new URLSearchParams(window.location.search);
 
     if (error)
         return handleError(error); // stops the script here
-    if (voteHasBeenSent)
+    if (voteStatus === VOTE_STATUS.WAITING_SIGNATURE)
+        return (
+            <div className={classname}>
+                <Question text={"Veuillez confirmer votre vote avec votre " +
+                "wallet"}/>
+            </div>
+        );
+    if (voteStatus === VOTE_STATUS.SUCCESS)
         return (
             <div className={classname}>
                 <Question text={"Votre vote est envoyé !"} mode={"cool"}/>
@@ -54,7 +62,6 @@ function VotePage() {
         dispatch(fetchAddrAndSetContract(ballotName));
         return null;
     }
-    // http://localhost:3001/?name=test%20youpi%203&code=a
     if (!endTime || !title || !question || !candidateNames){
         dispatch(fetchContractData());
         return null;

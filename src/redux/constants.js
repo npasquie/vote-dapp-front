@@ -14,3 +14,8 @@ export const BALLOT_DEPLOYMENT_STATUS = {
     SUCCESS: "success !",
     FAILED: "failed"
 };
+export const VOTE_STATUS = {
+    INITIAL: "initial",
+    WAITING_SIGNATURE: "waiting signature",
+    SUCCESS: "success"
+};

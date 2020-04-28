@@ -9,7 +9,10 @@ import {
     setWeb3Instance
 } from "./actions";
 import getWeb3 from "../web3/getWeb3";
-import {BALLOT_DEPLOYMENT_STATUS, WEB3_CONNEXION_STATUS} from "./constants";
+import {
+    BALLOT_DEPLOYMENT_STATUS,
+    VOTE_STATUS,
+    WEB3_CONNEXION_STATUS} from "./constants";
 import {getBallotCreationArgs} from "./selectors";
 import store from "./store";
 import ballotUtils from "ballot-utils";
@@ -45,12 +48,13 @@ const sendVote = () => {
     return dispatch => {
         let {contract, accounts} = getState().ethereum;
         let {candidateNameSelected, code} = getState().vote;
+        let vote = ballotUtils.strToBytes32(candidateNameSelected);
+        let codeArg = ballotUtils.strToBytes32(code);
 
-        contract.methods.vote(
-            ballotUtils.strToBytes32(candidateNameSelected),
-                ballotUtils.strToBytes32(code))
-            .send({from: accounts[0]}).then(() => {
-
+        dispatch(setVoteElem("voteStatus",VOTE_STATUS.WAITING_SIGNATURE));
+        contract.methods.vote(vote,codeArg).send({from: accounts[0]})
+            .then(() => {
+            dispatch(setVoteElem("voteStatus",VOTE_STATUS.SUCCESS));
         }).catch(error => {
             handleVoteError(error,dispatch);
         });

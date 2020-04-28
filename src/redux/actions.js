@@ -95,7 +95,3 @@ export const setContract = (contract) => ({
         contract: contract
     }
 });
-
-export const setVoteAsRegistered = () => ({
-    type: SET_VOTE_AS_REGISTERED
-});
