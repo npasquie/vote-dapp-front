@@ -6,7 +6,8 @@ import SubmitVote from "./SubmitVote";
 import {useDispatch, useSelector} from "react-redux";
 import {handleError} from "../utils/utils";
 import {setVoteElem} from "../redux/actions";
-import {fetchAddrAndSetContract, fetchContractData} from "../redux/asyncActions";
+import {fetchAddrAndSetContract, fetchContractData}
+    from "../redux/asyncActions";
 import {VOTE_STATUS} from "../redux/constants";
 
 // TODO : remove this
@@ -70,7 +71,7 @@ function VotePage() {
         return null;
     }
 
-    // TODO : remove this
+     // TODO : remove this
     else {
         logResults(contract, candidateNames);
     }
