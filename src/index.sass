@@ -1,19 +1,28 @@
 body
     font: 14px "Century Gothic", Futura, sans-serif
-    margin: 20px
 
 %center-children-column
     display: flex
     flex-direction: column
     align-items: center
     flex-wrap: wrap
-    position: absolute
     height: fit-content
+    align-content: center
     top: 0
     bottom: 0
     left: 0
     right: 0
     margin: auto
+
+.top-bar
+    width: 100%
+    background-color: #75d1c8
+    display: flex
+    flex-direction: row
+    align-content: center
+    .etherscan-link
+        position: absolute
+        float: right
 
 %question
     margin: 10px
@@ -49,6 +58,7 @@ body
     display: flex
     flex-direction: row
     flex-wrap: wrap
+    justify-content: center
 
 .candidate
     margin: 10px
@@ -71,20 +81,15 @@ body
         width: 100px
 
 .submit-vote
+    display: flex
     margin-top: 20px
+    justify-content: center
     button
         padding: 10px
         background-color: lawngreen
         border-radius: 25%
     button:hover
         background-color: green
-
-.top-bar
-    top: 0
-    width: available
-    background-color: gray
-    height: 40px
-    margin: 0
 
 .candidate-input
     display: flex

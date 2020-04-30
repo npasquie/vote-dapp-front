@@ -34,8 +34,7 @@ function VotePage() {
     if (voteStatus === VOTE_STATUS.WAITING_SIGNATURE)
         return (
             <div className={classname}>
-                <Question text={"Veuillez confirmer votre vote avec votre " +
-                "wallet"}/>
+                <Question text={"Votre vote a été envoyé à la blockchain"}/>
             </div>
         );
     if (voteStatus === VOTE_STATUS.SUCCESS)
