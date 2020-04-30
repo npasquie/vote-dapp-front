@@ -17,6 +17,8 @@ import {getBallotCreationArgs} from "./selectors";
 import store from "./store";
 import ballotUtils from "ballot-utils";
 import ballotInterface from "Ballot";
+import Question from "../components/Question";
+import React from "react";
 
 const getState = store.getState; // this is a func
 
@@ -82,6 +84,49 @@ const fetchAddrAndSetContract = (name) => {
         req.send();
     };
 };
+
+const fetchScores = () => {
+    return dispatch => {
+        let contract = getState().ethereum.contract;
+        let candidateNames = getState().vote.candidateNames;
+        let candidatesInfos = [];
+        let maxScore = 0;
+        candidateNames.forEach((name,i) => {
+            contract.methods.getCandidateScore(
+                ballotUtils.strToBytes32(name)).call()
+                .then(res => {
+                    candidatesInfos.push(
+                        {name: name, score: res}
+                    );
+                    maxScore = res > maxScore ? res : maxScore;
+                    if (i === candidateNames.length - 1) // on last candidate
+                        saveScores(candidatesInfos,maxScore,dispatch);
+                });
+        });
+    }
+};
+
+function saveScores(candidatesInfos,maxScore,dispatch) {
+    let scores = [];
+    let isWinner;
+
+    candidatesInfos.forEach((info,i) => {
+        isWinner = info.score === maxScore;
+        scores.push(
+            <Question
+                text={`${info.name}: ${info.score} ` +
+                `${isWinner ? "(victoire)" : ""}`}
+                mode={isWinner ? "cool" : undefined}
+                key={i}
+            />
+       );
+    });
+    dispatch(setVoteElem("scores", scores));
+}
+
+// <Question
+//     text={name + ": " + res}
+//     key={i}/>
 
 const fetchContractData = () => {
     return dispatch => {
@@ -242,4 +287,5 @@ export {
     createBallot,
     fetchAddrAndSetContract,
     fetchContractData,
-    sendVote};
+    sendVote,
+    fetchScores};

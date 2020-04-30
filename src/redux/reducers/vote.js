@@ -12,6 +12,7 @@ const initialState = {
     title: null,
     question: null,
     error: null,
+    scores: null,
     voteStatus: VOTE_STATUS.INITIAL
     // contract is in ethereum reducer
 };
@@ -50,6 +51,12 @@ export default function(state = initialState, action) {
                     return {
                         ...state,
                         voteStatus: data
+                    }
+                }
+                case "scores": {
+                    return {
+                        ...state,
+                        scores: data
                     }
                 }
                 case "title": {

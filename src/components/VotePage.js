@@ -6,12 +6,9 @@ import SubmitVote from "./SubmitVote";
 import {useDispatch, useSelector} from "react-redux";
 import {handleError} from "../utils/utils";
 import {setVoteElem} from "../redux/actions";
-import {fetchAddrAndSetContract, fetchContractData}
+import {fetchAddrAndSetContract, fetchContractData, fetchScores}
     from "../redux/asyncActions";
 import {VOTE_STATUS} from "../redux/constants";
-
-// TODO : remove this
-import bu from "ballot-utils";
 
 /**
  * @return {null}
@@ -28,6 +25,7 @@ function VotePage() {
     const endTime = useSelector(state => state.vote.endTime);
     const question = useSelector(state => state.vote.question);
     const voteStatus = useSelector(state => state.vote.voteStatus);
+    const scores = useSelector(state => state.vote.scores);
     const classname  = "vote-page";
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -54,14 +52,6 @@ function VotePage() {
                 "erreur: le nom du scrutin n'est pas dans l'url"));
         return null;
     }
-    if (!code) {
-        if (urlParams.get("code"))
-            dispatch(setVoteElem("code",urlParams.get("code")));
-        else
-            dispatch(setVoteElem("error",
-                "erreur: le code du votant n'est pas dans l'url"));
-        return null;
-    }
     if (!contract) {
         dispatch(fetchAddrAndSetContract(ballotName));
         return null;
@@ -70,10 +60,29 @@ function VotePage() {
         dispatch(fetchContractData());
         return null;
     }
-
-     // TODO : remove this
-    else {
-        logResults(contract, candidateNames);
+    if (endTime.getTime() < Date.now()){ // ballot is closed, show results
+        if (!scores){
+            dispatch(fetchScores());
+            return null;
+        }
+        return (
+            <div className={classname}>
+                <VoteTitle text={title}/>
+                <Question text={question}/>
+                <br/>
+                <Question text={"resultats"}/>
+                <br/>
+                {scores}
+            </div>
+        );
+    }
+    if (!code) {
+        if (urlParams.get("code"))
+            dispatch(setVoteElem("code",urlParams.get("code")));
+        else
+            dispatch(setVoteElem("error",
+                "erreur: le code du votant n'est pas dans l'url"));
+        return null;
     }
 
     return (
@@ -84,14 +93,6 @@ function VotePage() {
             <SubmitVote/>
         </div>
     );
-}
-
-// TODO : remove this
-function logResults(contract,candidateNames) {
-    candidateNames.forEach(name => {
-       contract.methods.getCandidateScore(bu.strToBytes32(name)).call()
-           .then(res => {console.log(name + " : " + res)});
-    });
 }
 
 export default VotePage;
