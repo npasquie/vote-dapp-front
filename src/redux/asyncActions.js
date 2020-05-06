@@ -54,18 +54,31 @@ const getWeb3Accounts = (web3) => {
 
 const sendVote = () => {
     return dispatch => {
-        let {contract, accounts} = getState().ethereum;
+        let {contract} = getState().ethereum;
+
         let {candidateNameSelected, code} = getState().vote;
         let vote = ballotUtils.strToBytes32(candidateNameSelected);
         let codeArg = ballotUtils.strToBytes32(code);
+        let req = new XMLHttpRequest();
+        let json = JSON.stringify({
+            _address: contract.options.address,
+            _vote: vote,
+            _code: codeArg
+        });
+
+        req.open("POST",`/api/vote`,true);
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         dispatch(setVoteElem("voteStatus",VOTE_STATUS.WAITING_SIGNATURE));
-        contract.methods.vote(vote,codeArg).send({from: accounts[0]})
-            .then(() => {
-            dispatch(setVoteElem("voteStatus",VOTE_STATUS.SUCCESS));
-        }).catch(error => {
-            handleVoteError(error,dispatch);
-        });
+
+        req.onload = () => {
+            if (req.status === 200) {
+                dispatch(setVoteElem("voteStatus",VOTE_STATUS.SUCCESS));
+            } else {
+                handleVoteError(req.response,dispatch);
+            }
+        };
+        req.send(json);
     };
 };
 
