@@ -6,7 +6,7 @@ import store from './redux/store';
 import VoteDapp from "./components/VoteDapp";
 import {getWeb3Action} from "./redux/asyncActions";
 
-store.dispatch(getWeb3Action());
+store.dispatch(getWeb3Action(false));
 
 ReactDOM.render(
     <Provider store={store}>

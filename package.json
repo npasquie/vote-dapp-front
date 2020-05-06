@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@truffle/hdwallet-provider": "^1.0.34",
     "Ballot": "link:vote-dapp-contract/build/Ballot",
     "ballot-utils": "link:vote-dapp-contract/misc/ballot-utils",
     "email-addresses": "^3.1.0",

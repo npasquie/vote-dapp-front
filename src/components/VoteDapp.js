@@ -12,9 +12,9 @@ import {WEB3_CONNEXION_STATUS} from "../redux/constants";
 import {handleError} from "../utils/utils";
 
 function VoteDapp() {
-
     const web3Status = useSelector(state => state.ethereum.web3ConnexionStatus);
     const error = useSelector(state => state.ethereum.error);
+
     switch (web3Status) {
         case WEB3_CONNEXION_STATUS.PENDING: {
             return (

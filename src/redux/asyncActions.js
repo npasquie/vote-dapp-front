@@ -9,6 +9,7 @@ import {
     setWeb3Instance
 } from "./actions";
 import getWeb3 from "../web3/getWeb3";
+import getWeb3FromMetamask from "../web3/getWeb3FromMetamask";
 import {
     BALLOT_DEPLOYMENT_STATUS,
     VOTE_STATUS,
@@ -22,17 +23,22 @@ import React from "react";
 
 const getState = store.getState; // this is a func
 
-const getWeb3Action = () => {
+const getWeb3Action = (withMetamask) => {
     return dispatch => {
+        let dynamicGetWeb3;
         dispatch(changeWeb3ConnexionStatus(
             WEB3_CONNEXION_STATUS.PENDING));
-        getWeb3().then(response => {
+        if (withMetamask) {
+            dynamicGetWeb3 = getWeb3FromMetamask;
+        } else {
+            dynamicGetWeb3 = getWeb3;
+        }
+        dynamicGetWeb3().then(response => {
             dispatch(getWeb3Accounts(response));
+        }).catch(error => {
+            handleWeb3Error(error, dispatch);
         })
-        .catch(error => {
-            handleWeb3Error(error,dispatch);
-        })
-    };
+    }
 };
 
 const getWeb3Accounts = (web3) => {
@@ -123,10 +129,6 @@ function saveScores(candidatesInfos,maxScore,dispatch) {
     });
     dispatch(setVoteElem("scores", scores));
 }
-
-// <Question
-//     text={name + ": " + res}
-//     key={i}/>
 
 const fetchContractData = () => {
     return dispatch => {
