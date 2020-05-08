@@ -13,7 +13,7 @@ function Candidate(props) {
     return(
         <div className={classname + (selected ? " clicked" : "")}>
             <button onClick={()=>dispatch(chooseCandidate(name))}>
-                <CandidatePicture/>
+                <CandidatePicture name={name}/>
                 <h3>{name}</h3>
             </button>
         </div>

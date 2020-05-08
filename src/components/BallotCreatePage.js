@@ -11,10 +11,11 @@ function BallotCreatePage() {
     const deploymentLogs = useSelector(state =>
         state.ballotCreate.deploymentLogs);
 
-    if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.NOT_LAUNCHED)
-        return(
+    if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.NOT_LAUNCHED) {
+        return (
             <BallotCreateForm/>
         );
+    }
     else {
         let mode = "";
         if (deploymentStatus === BALLOT_DEPLOYMENT_STATUS.SUCCESS)

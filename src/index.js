@@ -6,7 +6,9 @@ import store from './redux/store';
 import VoteDapp from "./components/VoteDapp";
 import {getWeb3Action} from "./redux/asyncActions";
 
-store.dispatch(getWeb3Action(false));
+const urlParams = new URLSearchParams(window.location.search);
+
+store.dispatch(getWeb3Action(urlParams.get("metamask-on") !== null));
 
 ReactDOM.render(
     <Provider store={store}>
